@@ -27,6 +27,7 @@ global.GRAVITY = 0.05;
 global.JUMPFORCE = 7;
 
 player.jumping = false;
+player.falling = true;
 
 global.intersects = null;
 global.lockedMouse = false;

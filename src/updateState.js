@@ -11,16 +11,18 @@ export default function updateState(){
     cubes[1].rotation.y += 0.01;
     if(lockedMouse){
         if(devMode){
-            if(player.jumping === true){
-                player.position.y += JUMPFORCE * FRAME;
-            }
-            if(player.position.y > -4.8){
+            if(player.falling){
                 grav += GRAVITY * FRAME;
                 player.position.y -= grav;
-            } else {
+                if(player.jumping){
+                    player.position.y += JUMPFORCE * FRAME;
+                }
+            }
+            if(player.position.y < -4.8){
                 player.position.y = -4.8;
-                grav = GRAVITY;
                 player.jumping = false;
+                player.falling = false;
+                grav = GRAVITY;
             }
             /*if(!player.children[0]){
                 camera.rotation.y = -me.mouse.curr.x;// * Math.PI;
@@ -55,8 +57,9 @@ export default function updateState(){
                 player.rotation.y = -me.mouse.curr.x;// * Math.PI;
                 player.rotation.x = -me.mouse.curr.y;// * Math.PI; 
                 if(me.keyboard[32]){
-                    if(player.jumping === false){
+                    if((!player.jumping) && (!player.falling)){
                         player.jumping = true;
+                        player.falling = true;
                     }
                 }
                 if(me.keyboard[87]){//w
