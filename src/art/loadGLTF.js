@@ -5,6 +5,8 @@ export default function loadGLTF() {
         'test.gltf',
             function( gltf ) {
             //gltf.scene.children[0].position.y = -3.5;
+            gltf.scene.children[0].material.wireframe = true;
+            gltf.scene.children[0].position.y = -3.8;
             scene.add( gltf.scene.children[0] );
             gltf.animations;
             gltf.scenes;

@@ -1,16 +1,37 @@
-import makeShaderCube from './makeShaderCube';
+import shaderCube from './shaderCube';
+import gameObj from './makeMesh';
 
 var cubes = [];
+var color1 = {
+    a: 0xE9B2E1,
+    b: 0x09B2E1,
+}
+
+var color2 = {
+    a: 0xACB6E5,
+    b: 0x74ebd5
+}
+
+var pos1 = { x: 7, y: 0, z:-5 };
+var pos2 = { x: 0, y: 0, z:-5 };
+var pos3 = { x:-7, y: 0, z:-5 };
 
 export default function addCubes() {
-    var mesh = makeShaderCube();
-    mesh.position.z = -5;
-    scene.add(mesh);
-    var mesh2 = makeShaderCube();
-    mesh2.position.z = -5;
-    mesh2.position.x = 7;
-    scene.add(mesh2);
-    cubes[0] = mesh;
+    var mesh1 = new shaderCube(color2,pos1,"mesh1");
+    var mesh2 = new shaderCube(color2,pos2,"mesh2");
+    var mesh3 = new gameObj(color1,pos3,"mesh3");
+
+    scene.add(mesh1.mesh);
+    scene.add(mesh2.mesh);
+    scene.add(mesh3.mesh);
+
+    cubes[0] = mesh1;
     cubes[1] = mesh2;
+    cubes[2] = mesh3;
+    
+    views.game.objectList[0] = mesh1;
+    views.game.objectList[1] = mesh2;
+    views.game.objectList[2] = mesh3;
+
     return cubes;
 }

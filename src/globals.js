@@ -23,8 +23,8 @@ global.FPS = 60;
 global.FRAME = 1 / FPS;
 global.DEV_CAM_SPEED = 0.1;
 
-global.GRAVITY = 0.05;
-global.JUMPFORCE = 7;
+global.GRAVITY = 0.083;
+global.JUMPFORCE = 10;
 
 player.jumping = false;
 player.falling = true;
@@ -57,8 +57,8 @@ global.views = {
     game: {
         scene: 0,
         camera: 0,
-        object_list: [],
-        object_dict: [],
+        objectList: [],
+        objectDict: [],
     },
     loading: {
         scene: 0,

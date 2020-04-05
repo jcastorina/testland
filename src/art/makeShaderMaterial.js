@@ -1,20 +1,17 @@
-var mesh;
+export default (c1,c2) => {
 
-export default function makeShaderCube() {
     let uniforms = {
-        colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
-        colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)}
+        colorB: {type: 'vec3', value: new THREE.Color(c1)},
+        colorA: {type: 'vec3', value: new THREE.Color(c2)}
     }
 
-    let geometry = new THREE.BoxGeometry(1,1,1);
     let material = new THREE.ShaderMaterial({
         uniforms: uniforms,
         fragmentShader: fragmentShader(),
         vertexShader: vertexShader(),
     })
 
-    mesh = new THREE.Mesh(geometry, material);
-    return mesh;
+    return material;
 }
 
 function vertexShader() {
@@ -35,7 +32,7 @@ function fragmentShader() {
     uniform vec3 colorA;
     uniform vec3 colorB;
     varying vec3 vUv;
-    
+
     void main() {
         gl_FragColor = vec4(mix(colorA, colorB, vUv.z), 1.0);
     }

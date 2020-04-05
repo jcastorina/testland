@@ -1,14 +1,16 @@
 import raycast from './tools/raycast';
-import jump from './tools/jump';
+import idMaker from './art/superExample.js';
 
+global.launchVec = new THREE.Vector3();
 global.grav = GRAVITY;
-var i;
+
+var gen = idMaker();
 
 export default function updateState(){
-    cubes[0].rotation.x += 0.01;
-    cubes[0].rotation.y += 0.01;
-    cubes[1].rotation.z -= 0.01;
-    cubes[1].rotation.y += 0.01;
+    cubes[0].mesh.rotation.x += 0.01;
+    cubes[0].mesh.rotation.y += 0.01;
+    cubes[1].mesh.rotation.z -= 0.01;
+    cubes[1].mesh.rotation.y += 0.01;
     if(lockedMouse){
         if(devMode){
             if(player.falling){
@@ -90,6 +92,10 @@ export default function updateState(){
         if(intersects[0]){
             if(intersects[0].object.name != "grass"){
                 intersects[0].object.rotation.y += 0.05;
+                if(me.mouse.down){
+                    launchVec.subVectors(intersects[0].object.position,player.position).normalize();
+                    console.log(gen.next().value);
+                }
             }
         }
     }
