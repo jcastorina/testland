@@ -4,7 +4,6 @@ import './style/style.css';
 import doArt from './art/doArt';
 import animate from './init/animate';
 import init from './init/init';
-import './art/superExample';
 
 init();
 doArt();

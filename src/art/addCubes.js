@@ -21,14 +21,15 @@ export default function addCubes() {
     var mesh2 = new shaderCube(color2,pos2,"mesh2");
     var mesh3 = new gameObj(color1,pos3,"mesh3");
 
+    cubes[0] = mesh1.mesh;
+    cubes[1] = mesh2.mesh;
+    cubes[2] = mesh3.mesh;
+
     scene.add(mesh1.mesh);
     scene.add(mesh2.mesh);
     scene.add(mesh3.mesh);
-
-    cubes[0] = mesh1;
-    cubes[1] = mesh2;
-    cubes[2] = mesh3;
-    
+    //scene.add(cubes);
+ 
     views.game.objectList[0] = mesh1;
     views.game.objectList[1] = mesh2;
     views.game.objectList[2] = mesh3;

@@ -41,3 +41,5 @@ export default function * idMaker() {
     while(true)
         yield index++
 }
+var gen = idMaker();
+console.log(gen.next().value);

@@ -20,7 +20,7 @@ player.rotation.reorder("YXZ");
 scene.add(player);
 
 global.FPS = 60;
-global.FRAME = 1 / FPS;
+global.DURATION = 1 / FPS;
 global.DEV_CAM_SPEED = 0.1;
 
 global.GRAVITY = 0.083;

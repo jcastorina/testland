@@ -5,18 +5,35 @@ export default class gameObj {
     constructor( color, pos, name ){
         this.mesh = new THREE.Mesh( makePolyGeo(), makeShaderMaterial( color.a , color.b ));
         this.mesh.shot = false;
-        this.startingHeight = pos.y;
-        this.startingPos = pos;
+        this.mesh.startingHeight = pos.y;
+        this.mesh.startingPos = pos;
         this.mesh.position.set(pos.x,pos.y,pos.z);
         this.mesh.me = this.me = name;
-    }
-    next (launchVec) {
-        if(this.mesh.shot){
-            this.mesh.position.add(launchVec);
-            if(this.mesh.position.y < this.startingHeight){
-                this.mesh.position.set(this.startingPos.x,this.startingPos.y,this.startingPos.z);
-                this.mesh.shot = false;
+        this.mesh.launchVec = null;
+        this.mesh.duration = null;
+        this.mesh.weight = 15;
+        this.mesh.next = () => {
+            if(this.mesh.shot){
+                this.mesh.position.add(this.mesh.launchVec);
+                this.mesh.duration += DURATION;
+                this.mesh.position.y -= this.mesh.duration * GRAVITY * this.mesh.weight;
+                if(this.mesh.position.y < this.mesh.startingHeight){
+                    this.mesh.position.set(this.mesh.startingPos.x,this.mesh.startingPos.y,this.mesh.startingPos.z);
+                    this.mesh.shot = false;
+                    this.mesh.duration = 0;
+                }
             }
         }
     }
+    /*next () {
+        if(this.mesh.shot){
+            this.mesh.position.add(this.launchVec);
+            this.mesh.duration += DURATION;
+            this.mesh.position.y -= this.mesh.duration * GRAVITY * this.mesh.weight;
+            if(this.mesh.position.y < this.mesh.startingHeight){
+                this.mesh.position.set(this.mesh.startingPos.x,this.mesh.startingPos.y,this.mesh.startingPos.z);
+                this.mesh.shot = false;
+            }
+        }
+    }*/
 }
