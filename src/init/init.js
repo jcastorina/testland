@@ -1,4 +1,4 @@
-import handlers from './handlers.js';
+import controls from './controls.js';
 import initRenderer from './initRenderer';
 
 export default () => {
@@ -9,10 +9,9 @@ export default () => {
     camera.position.y = 3;
     renderer.domElement.onclick = () => {
     renderer.domElement.requestPointerLock();
-    locked_mouse = true;
-    console.log(locked_mouse);
+    lockedMouse = true;
     }
     renderer.sortObjects = false;
     renderer.autoClear = false;
-    handlers();
+    controls();
 }

@@ -7,4 +7,5 @@ import init from './init/init';
 
 init();
 doArt();
+player.add(camera);
 animate();

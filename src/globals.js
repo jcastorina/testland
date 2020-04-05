@@ -4,6 +4,7 @@ global.camera = new THREE.PerspectiveCamera( 68, window.innerWidth / window.inne
 camera.rotation.reorder("YXZ");
 
 global.scene = new THREE.Scene();
+global.textureLoader = new THREE.TextureLoader();
 
 global.div = document.createElement( 'div' );
 div.setAttribute( "id", "container");
@@ -12,10 +13,24 @@ document.body.appendChild( div );
 global.raycaster = new THREE.Raycaster();
 global.vmouse = new THREE.Vector2();
 
+global.player = new THREE.Object3D();
+player.name = "player";
+player.rotation.reorder("YXZ");
+
+scene.add(player);
+
+global.FPS = 60;
+global.FRAME = 1 / FPS;
 global.DEV_CAM_SPEED = 0.1;
 
+global.GRAVITY = 0.05;
+global.JUMPFORCE = 7;
+
+player.jumping = false;
+
 global.intersects = null;
-global.locked_mouse = false;
+global.lockedMouse = false;
+global.devMode = true;
 
 global.me = {
     keyboard:[],
