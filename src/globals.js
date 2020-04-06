@@ -18,9 +18,10 @@ global.player = new THREE.Object3D();
 player.name = "player";
 player.rotation.reorder("YXZ");
 
-global.FPS = 60;
-global.DURATION = 1 / FPS;
+//global.FPS = 60;
+//global.DURATION = 1 / FPS;
 global.DEV_CAM_SPEED = 0.1;
+global.DELTAFACTOR = 1;
 
 global.GRAVITY = 0.083;
 global.JUMPFORCE = 10;

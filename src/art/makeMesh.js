@@ -9,19 +9,19 @@ export default class gameObj {
         this.mesh.position.set(pos.x,pos.y,pos.z);
         this.mesh.name = this.name = name;
         this.mesh.launchVec = null;
-        this.mesh.duration = null;
+        this.mesh.force = null;
         this.mesh.weight = 15;
         this.spin = spin;
         this.mesh.scale.set(scale.x,scale.y,scale.z)
-        this.mesh.next = () => {
+        this.mesh.next = (delta) => {
             if(this.mesh.shot){
                 this.mesh.position.add(this.mesh.launchVec);
-                this.mesh.duration += DURATION;
-                this.mesh.position.y -= this.mesh.duration * GRAVITY * this.mesh.weight;
+                this.mesh.force += delta;
+                this.mesh.position.y -= this.mesh.force * GRAVITY * this.mesh.weight;
                 if(this.mesh.position.y < this.mesh.startingHeight){
                     this.mesh.position.set(this.mesh.startingPos.x,this.mesh.startingPos.y,this.mesh.startingPos.z);
                     this.mesh.shot = false;
-                    this.mesh.duration = 0;
+                    this.mesh.force = 0;
                 }
             }
             this.mesh.rotation.x += this.spin.x;

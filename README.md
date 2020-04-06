@@ -1,16 +1,16 @@
 # testyland
 little test build with node js, webpack, and three js
 
-gotta do:
+to build locally:
 
-npm install
-
-then:
-
-npm run start
+~# npm install
+~# npm run start
 
 server is at:
 
 http://127.0.0.1:8080
+
+WASD + Space + Mouse to control camera
+SHIFT+WASD + Space to control box
 
 ENJOY~! lol

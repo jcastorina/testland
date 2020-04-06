@@ -1,32 +1,68 @@
 import raycast from './tools/raycast';
 
 global.launchVec = new THREE.Vector3();
-global.grav = GRAVITY;
+var ray = new THREE.Raycaster();
 
 var i;
+var clock = new THREE.Clock();
+var delta;
+var force = GRAVITY;
+var lastPos = new THREE.Vector3();
+var newPos = new THREE.Vector3();
+//let lastIndex = [];
+let index0 = new THREE.Vector3();
+let index1 = new THREE.Vector3();
+let index2 = new THREE.Vector3();
+let index3 = new THREE.Vector3();
 
 export default function updateState(){
-    for(i in cubeMeshes){
-        cubeMeshes[i].next();
+
+    delta = clock.getDelta() * DELTAFACTOR;
+    if(player.falling){
+        force += GRAVITY * delta;
+        player.position.y -= force;
+        if(player.jumping){
+            player.position.y += JUMPFORCE * delta * 1.2;
+        }
+    }
+    if(player.position.y < -4.8){
+        player.position.y = -4.8;
+        player.jumping = false;
+        player.falling = false;
+        force = GRAVITY;
+    }
+    if(movingCube.falling){
+        movingCube.force += GRAVITY * delta;
+        movingCube.mesh.position.y -= movingCube.force;
+        if(movingCube.jumping){
+            movingCube.mesh.position.y += JUMPFORCE * delta * 1.2;
+        }
+    }
+    if(movingCube.mesh.position.y < -3.8){
+        movingCube.mesh.position.y = -3.8;
+        movingCube.jumping = false;
+        movingCube.falling = false;
+        movingCube.force = GRAVITY;
     }
     if(lockedMouse){
+        lastPos.set(newPos.x,newPos.y,newPos.z);
+        index3.set(index2.x,index2.y,index2.z);
+        index2.set(index1.x,index1.y,index1.z);
+        index1.set(index0.x,index0.y,index0.z);
+        index0.set(lastPos.x,lastPos.y,lastPos.z);
+        
+
         if(devMode){
-            if(player.falling){
-                grav += GRAVITY * DURATION;
-                player.position.y -= grav;
-                if(player.jumping){
-                    player.position.y += JUMPFORCE * DURATION;
-                }
-            }
-            if(player.position.y < -4.8){
-                player.position.y = -4.8;
-                player.jumping = false;
-                player.falling = false;
-                grav = GRAVITY;
-            }
+
             player.rotation.y = -me.mouse.curr.x;// * Math.PI;
             player.rotation.x = -me.mouse.curr.y;// * Math.PI; 
             if(me.keyboard[16]){
+                if(me.keyboard[32]){//space
+                    if((!movingCube.jumping) && (!movingCube.falling)){
+                        movingCube.jumping = true;
+                        movingCube.falling = true;
+                    }
+                }
                 if(me.keyboard[87]){//w
                     movingCube.mesh.position.z -= DEV_CAM_SPEED;
                 }
@@ -40,6 +76,12 @@ export default function updateState(){
                     movingCube.mesh.position.x += DEV_CAM_SPEED;
                 }
                 } else {
+                if(me.keyboard[32]){//space
+                    if((!player.jumping) && (!player.falling)){
+                        player.jumping = true;
+                        player.falling = true;
+                    }
+                }    
                 if(me.keyboard[87]){//w
                     player.position.z -= DEV_CAM_SPEED * Math.sin(-player.rotation.y  + Math.PI/2);
                     player.position.x += DEV_CAM_SPEED * Math.sin(-player.rotation.y);
@@ -69,35 +111,36 @@ export default function updateState(){
                 }
             }
         }
-        
+ 
         var originPoint = movingCube.mesh.position.clone();
-        var ray = new THREE.Raycaster();
-        var coll = collisions(ray,originPoint);
+        var coll = collisions(ray,originPoint,index1);
         coll.next();
-        /*for (i in movingCube.mesh.geometry.vertices){
-            var localVertex = movingCube.mesh.geometry.vertices[i].clone();
-            var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
-            var directionVector = globalVertex.sub( movingCube.mesh.position )
-        
-            ray.set( originPoint, directionVector.clone().normalize() );
-            var collisionResults = ray.intersectObjects( shitBoxes );
-            if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
-                console.log('hit');
-            }
-        }*/
+
+        newPos.set(movingCube.mesh.position.x,movingCube.mesh.position.y,movingCube.mesh.position.z);
+
     }
+    for(i in cubeMeshes){
+        cubeMeshes[i].next(delta);
+    }
+
 }
 
-function * collisions(ray,originPoint) {
+function * collisions(ray,originPoint,index) {
     var i = 0;
+
     while(i < movingCube.mesh.geometry.vertices.length){
         var localVertex = movingCube.mesh.geometry.vertices[i].clone();
         var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
         var directionVector = globalVertex.sub( movingCube.mesh.position )
         ray.set( originPoint, directionVector.clone().normalize() );
         var collisionResults = ray.intersectObjects( shitBoxes );
+        //console.log('collpre', lastPos);
         if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
-            yield console.log('HIT?');
+            movingCube.mesh.position.set(index.x,index.y,index.z);
+            yield console.log('doink');
+            
+            //yield console.log('HIT?');
+           // yield movingCube.mesh.position = 
         }
         i++;
     }
