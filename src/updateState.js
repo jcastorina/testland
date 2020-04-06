@@ -71,18 +71,37 @@ export default function updateState(){
         }
         
         var originPoint = movingCube.mesh.position.clone();
-        
-        for (i in movingCube.mesh.geometry.vertices){
+        var ray = new THREE.Raycaster();
+        var coll = collisions(ray,originPoint);
+        coll.next();
+        /*for (i in movingCube.mesh.geometry.vertices){
             var localVertex = movingCube.mesh.geometry.vertices[i].clone();
             var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
             var directionVector = globalVertex.sub( movingCube.mesh.position )
         
-            var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+            ray.set( originPoint, directionVector.clone().normalize() );
             var collisionResults = ray.intersectObjects( shitBoxes );
             if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
                 console.log('hit');
             }
-        }
+        }*/
     }
 }
+
+function * collisions(ray,originPoint) {
+    var i = 0;
+    while(i < movingCube.mesh.geometry.vertices.length){
+        var localVertex = movingCube.mesh.geometry.vertices[i].clone();
+        var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
+        var directionVector = globalVertex.sub( movingCube.mesh.position )
+        ray.set( originPoint, directionVector.clone().normalize() );
+        var collisionResults = ray.intersectObjects( shitBoxes );
+        if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
+            yield console.log('HIT?');
+        }
+        i++;
+    }
+}
+//var gen = idMaker();
+//console.log(gen.next().value);
 
