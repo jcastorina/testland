@@ -12,12 +12,11 @@ document.body.appendChild( div );
 
 global.raycaster = new THREE.Raycaster();
 global.vmouse = new THREE.Vector2();
+global.vmouseOffset = new THREE.Vector2();
 
 global.player = new THREE.Object3D();
 player.name = "player";
 player.rotation.reorder("YXZ");
-
-scene.add(player);
 
 global.FPS = 60;
 global.DURATION = 1 / FPS;
@@ -31,7 +30,13 @@ player.falling = true;
 
 global.intersects = null;
 global.lockedMouse = false;
+global.newLockedMouse = true;
 global.devMode = true;
+
+global.cubes = [];
+global.cubeMeshes = [];
+global.movingCube = null;
+global.shitBoxes = [];
 
 global.me = {
     keyboard:[],

@@ -1,17 +1,17 @@
-import makeShaderMaterial from './makeShaderMaterial';
-
 export default class shaderCube {
-    constructor(color, pos, name){
+    constructor(pos, scale, spin, name, material){
         let geometry = new THREE.BoxGeometry(1,1,1);
-        this.mesh = new THREE.Mesh(geometry, makeShaderMaterial(color.a,color.b));
+        this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.shot = false;
         this.mesh.startingHeight = pos.y;
         this.mesh.startingPos = pos;
         this.mesh.position.set(pos.x,pos.y,pos.z);
-        this.mesh.me = this.me = name;
+        this.mesh.name = this.name = name;
         this.mesh.launchVec = null;
         this.mesh.duration = null;
         this.mesh.weight = 6;
+        this.spin = spin;
+        this.mesh.scale.set(scale.x,scale.y,scale.z);
         this.mesh.next = () => {
             if(this.mesh.shot){
                 this.mesh.position.add(this.mesh.launchVec);
@@ -23,6 +23,9 @@ export default class shaderCube {
                     this.mesh.duration = 0;
                 }
             }
+            this.mesh.rotation.x += this.spin.x;
+            this.mesh.rotation.y += this.spin.y;
+            this.mesh.rotation.z += this.spin.z;
         }
     }
 }

@@ -11,8 +11,8 @@ export default () => {
 
     function onDocumentMouseMove(event) {
         if(lockedMouse){ 
-            vmouse.x = (event.clientX / window.innerWidth) * 2 - 1; 
-            vmouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            vmouse.x = (event.clientX / window.innerWidth) * 2 - 1 - vmouseOffset.x; 
+            vmouse.y = - (event.clientY / window.innerHeight) * 2 + 1 - vmouseOffset.y;
             me.mouse.curr.x += event.movementX/200;
             me.mouse.curr.y += event.movementY/200;
         }
@@ -44,6 +44,7 @@ export default () => {
         if(event.which === 27){
             document.exitPointerLock();
             lockedMouse = false;
+            newLockedMouse = true;
         }
         me.keyboard[event.which] = true;
     }

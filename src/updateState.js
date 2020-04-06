@@ -1,34 +1,14 @@
 import raycast from './tools/raycast';
-import doNext from './art/doNext';
 
 global.launchVec = new THREE.Vector3();
 global.grav = GRAVITY;
 
-//global.shot = [];
 var i;
 
 export default function updateState(){
-    cubes[0].rotation.x += 0.01;
-    cubes[0].rotation.y += 0.01;
-    cubes[1].rotation.z -= 0.01;
-    cubes[1].rotation.y += 0.01;
-    for(i in cubes){
-        cubes[i].next();
+    for(i in cubeMeshes){
+        cubeMeshes[i].next();
     }
-    /*for(i in shot){
-        shot[i].position.add(shot[i].launchVec);
-        shot[i].duration += DURATION;
-        shot[i].position.y -= shot[i].duration * GRAVITY * shot[i].weight;
-        if(shot[i].position.y <= shot[i].startingHeight){
-            shot[i].position.set(shot[i].startingPos.x,shot[i].startingPos.y,shot[i].startingPos.z);
-            if(shot[i].position shot[i].startingPos){
-                shot[i].shot = false;
-                shot[i].duration = 0;
-                shot.pop(i);
-            }
-        console.log(shot[i]);
-        }
-    }*/
     if(lockedMouse){
         if(devMode){
             if(player.falling){
@@ -44,14 +24,22 @@ export default function updateState(){
                 player.falling = false;
                 grav = GRAVITY;
             }
-                player.rotation.y = -me.mouse.curr.x;// * Math.PI;
-                player.rotation.x = -me.mouse.curr.y;// * Math.PI; 
-                if(me.keyboard[32]){//space
-                    if((!player.jumping) && (!player.falling)){
-                        player.jumping = true;
-                        player.falling = true;
-                    }
+            player.rotation.y = -me.mouse.curr.x;// * Math.PI;
+            player.rotation.x = -me.mouse.curr.y;// * Math.PI; 
+            if(me.keyboard[16]){
+                if(me.keyboard[87]){//w
+                    movingCube.mesh.position.z -= DEV_CAM_SPEED;
                 }
+                if(me.keyboard[65]){//a
+                    movingCube.mesh.position.x -= DEV_CAM_SPEED;
+                }
+                if(me.keyboard[83]){//s
+                    movingCube.mesh.position.z += DEV_CAM_SPEED;
+                }
+                if(me.keyboard[68]){//d
+                    movingCube.mesh.position.x += DEV_CAM_SPEED;
+                }
+                } else {
                 if(me.keyboard[87]){//w
                     player.position.z -= DEV_CAM_SPEED * Math.sin(-player.rotation.y  + Math.PI/2);
                     player.position.x += DEV_CAM_SPEED * Math.sin(-player.rotation.y);
@@ -72,15 +60,29 @@ export default function updateState(){
         }
         raycast();
         if(intersects[0]){
-            if(intersects[0].object.name != "grass"){
-                intersects[0].object.rotation.y += 0.05;
-                if(me.mouse.down){
-                    if(!intersects[0].object.shot){
-                        launchVec.subVectors(intersects[0].object.position,player.position).normalize();
-                        intersects[0].object.shot = true;
-                        intersects[0].object.launchVec = launchVec;
-                    }
+            intersects[0].object.rotation.y += 0.05;
+            if(me.mouse.down){
+                if(!intersects[0].object.shot){
+                    launchVec.subVectors(intersects[0].object.position,player.position).normalize();
+                    intersects[0].object.shot = true;
+                    intersects[0].object.launchVec = launchVec;
                 }
             }
         }
+        
+        var originPoint = movingCube.mesh.position.clone();
+        
+        for (i in movingCube.mesh.geometry.vertices){
+            var localVertex = movingCube.mesh.geometry.vertices[i].clone();
+            var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
+            var directionVector = globalVertex.sub( movingCube.mesh.position )
+        
+            var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+            var collisionResults = ray.intersectObjects( shitBoxes );
+            if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
+                console.log('hit');
+            }
+        }
     }
+}
+

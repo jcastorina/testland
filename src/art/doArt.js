@@ -7,7 +7,7 @@ import addGrass from './addGrass';
 export default () => {
     loadGLTF();
     loadSkybox(THREE,scene,camera);
-    global.cubes = addCubes();
+    addCubes();
     addGrass();
     favicon();
 }
