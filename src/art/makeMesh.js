@@ -25,15 +25,4 @@ export default class gameObj {
             }
         }
     }
-    /*next () {
-        if(this.mesh.shot){
-            this.mesh.position.add(this.launchVec);
-            this.mesh.duration += DURATION;
-            this.mesh.position.y -= this.mesh.duration * GRAVITY * this.mesh.weight;
-            if(this.mesh.position.y < this.mesh.startingHeight){
-                this.mesh.position.set(this.mesh.startingPos.x,this.mesh.startingPos.y,this.mesh.startingPos.z);
-                this.mesh.shot = false;
-            }
-        }
-    }*/
 }

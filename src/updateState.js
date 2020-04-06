@@ -79,7 +79,6 @@ export default function updateState(){
                         launchVec.subVectors(intersects[0].object.position,player.position).normalize();
                         intersects[0].object.shot = true;
                         intersects[0].object.launchVec = launchVec;
-                        //shot.push(intersects[0].object);
                     }
                 }
             }

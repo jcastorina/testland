@@ -13,5 +13,5 @@ export default () => {
         4,5,6,  6,7,4,
     ];
 
-    return new THREE.PolyhedronBufferGeometry( vertices, indices, 1, 1 );
+    return new THREE.PolyhedronBufferGeometry( vertices, indices, 1, 6 );
 }
