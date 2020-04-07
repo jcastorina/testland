@@ -14,6 +14,7 @@ let index0 = new THREE.Vector3();
 let index1 = new THREE.Vector3();
 let index2 = new THREE.Vector3();
 let index3 = new THREE.Vector3();
+var DOINK = false;
 
 export default function updateState(){
 
@@ -50,32 +51,10 @@ export default function updateState(){
         index2.set(index1.x,index1.y,index1.z);
         index1.set(index0.x,index0.y,index0.z);
         index0.set(lastPos.x,lastPos.y,lastPos.z);
-        
-
         if(devMode){
-
             player.rotation.y = -me.mouse.curr.x;// * Math.PI;
             player.rotation.x = -me.mouse.curr.y;// * Math.PI; 
-            if(me.keyboard[16]){
-                if(me.keyboard[32]){//space
-                    if((!movingCube.jumping) && (!movingCube.falling)){
-                        movingCube.jumping = true;
-                        movingCube.falling = true;
-                    }
-                }
-                if(me.keyboard[87]){//w
-                    movingCube.mesh.position.z -= DEV_CAM_SPEED;
-                }
-                if(me.keyboard[65]){//a
-                    movingCube.mesh.position.x -= DEV_CAM_SPEED;
-                }
-                if(me.keyboard[83]){//s
-                    movingCube.mesh.position.z += DEV_CAM_SPEED;
-                }
-                if(me.keyboard[68]){//d
-                    movingCube.mesh.position.x += DEV_CAM_SPEED;
-                }
-                } else {
+            if(!me.keyboard[16]){
                 if(me.keyboard[32]){//space
                     if((!player.jumping) && (!player.falling)){
                         player.jumping = true;
@@ -111,40 +90,63 @@ export default function updateState(){
                 }
             }
         }
- 
+
         var originPoint = movingCube.mesh.position.clone();
-        var coll = collisions(ray,originPoint,index1);
-        coll.next();
+        collisions(ray,originPoint,index3);
+
+
 
         newPos.set(movingCube.mesh.position.x,movingCube.mesh.position.y,movingCube.mesh.position.z);
-
     }
     for(i in cubeMeshes){
         cubeMeshes[i].next(delta);
     }
-
 }
 
-function * collisions(ray,originPoint,index) {
+function collisions(ray,originPoint,index) {
     var i = 0;
-
+    DOINK = false;
     while(i < movingCube.mesh.geometry.vertices.length){
         var localVertex = movingCube.mesh.geometry.vertices[i].clone();
         var globalVertex = localVertex.applyMatrix4( movingCube.mesh.matrix );
-        var directionVector = globalVertex.sub( movingCube.mesh.position )
+        var directionVector = globalVertex.sub( movingCube.mesh.position );
         ray.set( originPoint, directionVector.clone().normalize() );
         var collisionResults = ray.intersectObjects( shitBoxes );
-        //console.log('collpre', lastPos);
-        if( collisionResults[0] && collisionResults[0].distance < directionVector.length()){
+
+        if(collisionResults[0] && collisionResults[0].distance < directionVector.length()){
+ 
             movingCube.mesh.position.set(index.x,index.y,index.z);
-            yield console.log('doink');
-            
-            //yield console.log('HIT?');
-           // yield movingCube.mesh.position = 
+            console.log('doink');
+            DOINK = true;
+          
         }
-        i++;
+        i++;  
+   
+    }
+    if(DOINK === false){
+        if(me.keyboard[16]){
+            if(me.keyboard[32]){//space
+                if((!movingCube.jumping) && (!movingCube.falling)){
+                    movingCube.jumping = true;
+                    movingCube.falling = true;
+                }
+            }
+            if(me.keyboard[87]){//w
+                movingCube.mesh.position.z -= DEV_CAM_SPEED;
+            }
+            if(me.keyboard[65]){//a
+                movingCube.mesh.position.x -= DEV_CAM_SPEED;
+            }
+            if(me.keyboard[83]){//s
+                movingCube.mesh.position.z += DEV_CAM_SPEED;
+            }
+            if(me.keyboard[68]){//d
+                movingCube.mesh.position.x += DEV_CAM_SPEED;
+            }
+        }
     }
 }
+
 //var gen = idMaker();
 //console.log(gen.next().value);
 
